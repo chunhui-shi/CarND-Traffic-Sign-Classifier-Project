@@ -118,12 +118,13 @@ Then finalize the training epoch after these experiements. Since for now, the ep
 
 * Which parameters were tuned? How were they adjusted and why?
 
+Epochs, batch size, depths of Convolutional layers' filters. While depths were increased, the batch sizes were decreased.
+
 * What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
 
-If a well known architecture was chosen:
 * What architecture was chosen?
 
-leNet
+leNet architecture was chosen.
 
 * Why did you believe it would be relevant to the traffic sign application?
 
@@ -131,7 +132,7 @@ It worked for similar size of pictures and datasets.
 
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
 
-For valid dataset and test dataset, the accuracy is >93%, for the pictures I captured from google maps' street view, the final model can still give 80% accuracy. 
+For valid dataset and test dataset, the accuracy is >93%, for the pictures I captured from google maps' street view, the final model can still give 80% accuracy. If consider one image is not actually different than training data, the actual accuracy is around ~90%. This proved the model was working quite well.
 
 ###Test a Model on New Images
 
