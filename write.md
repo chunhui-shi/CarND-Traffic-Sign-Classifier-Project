@@ -50,22 +50,44 @@ Show a summary about how the dataset distrbuted on different classes.
 
 Preserve colors of images, meaning we are not going to use gray scale. 
 
-Brighten some dark pictures, Notice from the previous expration of the dataset that, some pictures seem taken at night thus almost not possible to view even to human eyes. 
+Brighten some dark pictures. Notice from the previous expration of the dataset that, some pictures seem taken at night thus almost not possible to view even to human eyes.
+
+The technique was used to brighten the pictures is to convert the RGB pictures to HSV(Hue, the relative scale of colors, Saturation, how white is the color, Value, the lightness of color), then increase the V value (lightness) and convert back to RGB scale. As shown below, the brightened images are really easier to view.
+
+[//]: # (Image References)
+
+[image_all]: ./all_classes.png "Figures of all classes"
+[image_brightened]: ./brightened_classes.png "Brightened figures of all classes"
+
+![alt text][image_all]
+![alt text][image_brightened]
 
 As a last step, I normalized the image data so all the values will be limit to 0 to 1 scale.
 
-I decided to generate additional data because larger training dataset proved to be very useful to increase the accuracy when test with valid datasets. 
+I decided to generate additional data because larger training dataset proved to be very useful to increase the accuracy when tested with validation datasets. 
 
-To add more data to the the data set, I rotates each image twice by slightly(and randomly) rotate each image to two opposite directions, thus I made the training dataset three times larger.  
+To add more data to the the data set, I rotated each image twice by slightly(and randomly) rotate each image to two opposite directions, thus I made the training dataset three times larger.  
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
-The final architecture is based on leNet. After several experiements about adding extra convolution layer, increasing depths of these layers could bring some visible improvements.
+The final architecture is based on leNet. 
 
+* Convolutional. Input = 32x32x3. Output = 28x28x12. pad='VALID'
+* Pooling. Input = 28x28x12. Output = 14x14x12.
+* Convolutional. Input = 14x14x12. Output = 10x10x32. pad='VALID'
+* Pooling. Input = 10x10x32. Output = 5x5x32.
+* Flatten (800)
+* Full Cononected. Input = 800. Output = 120.
+* Full Cononected. Input = 120. Output = 84.
+* Full Cononected. Input = 84. Output = 43.
 
 ####3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
+The optimizer used in the training is AdamOptimizer with default exponential decay rates. Ran some training with AdagradOptimizer and no siginificant difference observed.
+
 The default epochs for training is 10, since now the network become deeper since I increased the depth of two layers, notice that the neural network can reach a stable percent number on validate dataset around epoch 15 - 20.
+
+The batch size was set from default value of 128 to 64, the reason was to limit the memory usage on the linux VM hosted on my laptop.
 
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
@@ -73,16 +95,26 @@ My final model results were:
 * validation set accuracy of 95.6%
 * test set accuracy of 93.2%
 
-If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
-letNet was chosen because it showed very good performance when handling similar size of pictures and similar size of training samples. 
+The process is iterative approach to explore how different parameters' changes could have impact on accuracy.
+
+Initially letNet was chosen because it showed very good performance when handling similar size(28x28 vs. 32x32) of pictures and similar size of training samples. Run inital model result was ~80% accuracy on validation dataset. So this seemed a not bad starting point.
+
 * What were some problems with the initial architecture?
-Since traffic signs have color elements are actually color is important when people design traffic signs. So we should keep RGB color information in network.
+The initial architecture was design to handle gray images thus the volume was not big enough to take in much more complex(colorful) images with much different background and different light conditions and more complex pictures(e.g. bike, car, slippery, 'stop' etc.).
+
+As to preprocessing, since traffic signs have color elements. And actually color is important when people design traffic signs. So intuitely we should keep RGB color information in preprocessing. 
+
 * How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
 
-Have run many training on every changes made to parameters and architecture. Notice that the epoch number usually could be set to less than 20. In this case, don't see much overfitting concern so did not use dropout.
+Since I noticed that running more epochs can bring certain improvements on accuracy, So I extended training epochs to 40, 80, 400. However all stuck somewhere away from 93%.
 
-Another adjustment is increasing depths of convolutional layers and this proved helpful.
+So first focus on preprocessing inputs by not using gray images, then increase training datasets by randomly rotating the images a tiny angle to generate new images. Then brigtening the dark images. These efforts all brought some small improvements. But the impact is not big enough to consistently staying above 93% accuracy.
+
+Observed that the entropy of input actually is 3 times than gray images now, I also increased the volume of each layers(parameter numbers) about 2 -3 times. These adjustments proved to be critical to the accuracy improvement.
+
+
+Then finalize the training epoch after these experiements. Since for now, the epoch number usually could be set to less than 20. with this epcoh number, the concern of overfitting did not raise.
 
 * Which parameters were tuned? How were they adjusted and why?
 
