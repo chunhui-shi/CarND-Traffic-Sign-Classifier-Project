@@ -122,8 +122,11 @@ Then finalize the training epoch after these experiements. Since for now, the ep
 
 If a well known architecture was chosen:
 * What architecture was chosen?
+
 leNet
+
 * Why did you believe it would be relevant to the traffic sign application?
+
 It worked for similar size of pictures and datasets.
 
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
