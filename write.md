@@ -57,7 +57,7 @@ The technique was used to brighten the pictures is to convert the RGB pictures t
 [//]: # (Image References)
 
 [image_all]: ./all_classes.png "Figures of all classes"
-[image_brightened]: ./brightened_classes.png "Brightened figures of all classes"
+[image_brightened]: ./brighten_classes.png "Brightened figures of all classes"
 
 ![alt text][image_all]
 ![alt text][image_brightened]
